@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e2cc8ba4-9aff-41b3-b03e-af67b17c237b" name="droplet" url="http://198.199.95.59">
+        <fileTransfer host="198.199.95.59" port="22" rootFolder="/var/www/FlaskApp/FlaskApp" accessType="SFTP" password="dfd3dff4dffadfefdf81dfc0dfe6dfcddff3df9adf88df9e" username="root">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

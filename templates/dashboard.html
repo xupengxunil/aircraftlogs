@@ -1,10 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "header.html" %}
 
-</body>
-</html>
+{% block body %}
+
+    <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+            <li role="presentation"><a href="#checkout" aria-controls="checkout" role="tab" data-toggle="tab">Checkout</a></li>
+            <li role="presentation"><a href="#maintenance" aria-controls="maintenance" role="tab" data-toggle="tab">Maintenance</a></li>
+            <li role="presentation"><a href="#compliance" aria-controls="compliance" role="tab" data-toggle="tab">Compliance</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="home">
+
+                Insert Include Here
+
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="checkout">
+
+                Insert Include Here
+
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="maintenance">
+
+                Insert Include Here
+
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="compliance">
+
+                Insert Include Here
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

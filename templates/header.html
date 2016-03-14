@@ -1,10 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>Aircraft Logs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
+
+<header>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <img style="max-width:60px; margin-top: -7px;" src="{{ url_for('static', filename='images/mainlogo.png') }}">
+            </a>
+        </div>
+
+
+        <ul class="nav navbar-nav navbar-right">
+            <button type="button" class="btn btn-link" aria-label="Left Align" style="margin-top: 15px; margin-bottom: 5px; height: 60px; margin-right: 5px">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Logout
+            </button>
+            <button type="button" class="btn btn-link" aria-label="Left Align" data-toggle="modal", data-target="#ContactUs" style="margin-top: 15px; margin-bottom: 5px; height: 40px; margin-right: 15px">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Contact Us
+            </button>
+
+
+            <!-- Modal -->
+            <div id="Register" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    {% include "register.html" %}
+
+                </div>
+            </div>
+            <!-- Modal -->
+            <div id="ContactUs" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    {% include "contactus.html" %}
+
+                </div>
+            </div>
+        </ul>
+    </div>
+</header>
+
 <body>
 
+<div class="border-row" style="width: 100%; margine-bottom: 15px"></div>
+
+<div class="container-fluid" style="min-height:100%">
+
+    {% block body %} {% endblock %}
+
+</div>
+
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+
 </body>
+
 </html>
