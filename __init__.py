@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 
 from content_management import Content
 
@@ -12,7 +12,12 @@ def homepage():
 
 @app.route('/dashboard/')
 def dashboard():
+    flash('Welcome user')
     return render_template("dashboard.html")
+
+@app.route('/log/', methods=['GET', 'POST'])
+def log():
+    return render_template("log.html")
 
 @app.errorhandler(404)
 def page_not_found(e):
