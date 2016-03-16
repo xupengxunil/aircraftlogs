@@ -1,9 +1,9 @@
 from flask import Flask, render_template, flash, request, url_for, redirect, session
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from MySQLdb import escape_string as thwart
 import gc
 
+from forms import RegistrationForm
 from content_management import Content
 from dbconnect import connection
 
@@ -13,8 +13,8 @@ app = Flask(__name__)
 
 
 @app.errorhandler(404)
-def page_not_found():
-    return render_template("errors/404.html")
+def page_not_found(e):
+    return render_template("errors/404.html"), 404
 
 
 @app.route('/')
@@ -55,7 +55,7 @@ def register_page():
 
             x = c.execute("SELECT * FROM users WHERE username = (%s)",
                           (thwart(username)))
-            if int(len(x)) > 0:
+            if int(x) > 0:
                 flash("That username is already taken, please choose another")
                 return render_template('register.html', form=form)
 
@@ -73,24 +73,15 @@ def register_page():
 
                 return redirect(url_for('dashboard'))
 
-        render_template('register.html')
+        return render_template('register.html', form=form)
 
     except Exception as e:
-        return render_template("errors/500.html", error=e)
-
-
-class RegistrationForm(Form):
-    username = StringField('Username', [validators.Length(min=4, max=20)])
-    email = StringField('Email Address', [validators.Length(min=6, max=100)])
-    password = PasswordField('Password', [validators.DataRequired,
-                                          validators.EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Retype Password')
-
-    accept_tos = BooleanField('I accept the Terms of Service and the Privacy Notice', [validators.DataRequired])
+        return str(e)
+        # return render_template("errors/500.html", error=e)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
 
 
 """
