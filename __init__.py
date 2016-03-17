@@ -1,6 +1,5 @@
 from flask import Flask, render_template, flash, request, url_for, redirect, session
 from passlib.hash import sha256_crypt
-from MySQLdb import escape_string as thwart
 import gc
 
 from forms import RegistrationForm
@@ -53,15 +52,16 @@ def register_page():
             password = sha256_crypt.encrypt((str(form.password.data)))
             c, conn = connection()
 
-            x = c.execute("SELECT * FROM users WHERE username = (%s)",
-                          (thwart(username)))
+            sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
+            x = c.execute(sql_check_reg, (username,))
+
             if int(x) > 0:
                 flash("That username is already taken, please choose another")
                 return render_template('register.html', form=form)
 
             else:
-                c.execute("INSERT INTO users (username, password, email) VALUES (%s) (%s) (%s)",
-                          (thwart(username), thwart(password), thwart(email)))
+                sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+                c.execute(sql_insert_reg, (username, password, email))
                 conn.commit()
                 flash("Thanks for registering!")
                 c.close()
