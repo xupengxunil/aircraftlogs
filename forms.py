@@ -12,3 +12,9 @@ class RegistrationForm(Form):
 
     accept_tos = BooleanField('I accept the Terms of Service and the Privacy Notice',
                               [DataRequired()])
+
+
+class LoginForm(Form):
+    username = StringField('Username', [DataRequired()])
+    password = PasswordField('Password', [DataRequired()])
+
