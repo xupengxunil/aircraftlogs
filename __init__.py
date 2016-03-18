@@ -27,57 +27,66 @@ def dashboard():
     return render_template("dashboard.html")
 
 
-@app.route('/login/', methods=['GET', 'POST'])
-def login_page():
-    if request.method == "POST":
-        attempted_username = request.form['username']
-        attempted_password = request.form['password']
-
-        if attempted_username == "admin" and attempted_password == "admin":
-            return redirect(url_for('dashboard'))
-        else:
-            error = "Invalid credentials. Try again."
-            flash(error)
-    return render_template("login.html")
-
-
 @app.route('/register/', methods=['GET', 'POST'])
 def register_page():
-    try:
-        form = RegistrationForm(request.form)
 
-        if request.method == "POST" and form.validate():
-            username = form.username.data
-            email = form.email.data
-            password = sha256_crypt.encrypt((str(form.password.data)))
-            c, conn = connection()
+    form = RegistrationForm(request.form)
 
-            sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
-            x = c.execute(sql_check_reg, (username,))
+    if request.method == "POST" and form.validate():
+        username = form.username.data
+        email = form.email.data
+        password = sha256_crypt.encrypt((str(form.password.data)))
+        c, conn = connection()
 
-            if int(x) > 0:
-                flash("That username is already taken, please choose another")
-                return render_template('register.html', form=form)
+        sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
+        x = c.execute(sql_check_reg, (username,))
 
-            else:
-                sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-                c.execute(sql_insert_reg, (username, password, email))
-                conn.commit()
-                flash("Thanks for registering!")
-                c.close()
-                conn.close()
-                gc.collect()
+        if int(x) > 0:
+            flash("That username is already taken, please choose another")
+            return render_template('register.html', form=form)
 
-                session['logged_in'] = True
-                session['username'] = username
+        else:
+            sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+            c.execute(sql_insert_reg, (username, password, email))
+            conn.commit()
+            flash("Thanks for registering!")
+            c.close()
+            conn.close()
+            gc.collect()
 
-                return redirect(url_for('dashboard'))
+            session['logged_in'] = True
+            session['username'] = username
 
-        return render_template('register.html', form=form)
+            return redirect(url_for('dashboard'))
 
-    except Exception as e:
-        return str(e)
-        # return render_template("errors/500.html", error=e)
+    return render_template('register.html', form=form)
+
+
+@app.route('/login/', methods=["GET", "POST"])
+def login_page():
+    error = ''
+
+    c, conn = connection()
+
+    if request.method == "POST":
+        username = request.form['username']
+        sql_query = "SELECT * FROM users WHERE username = (%s)"
+        data = c.execute(sql_query, (username,))
+        data2 = c.fetchone()[2]
+
+        if sha256_crypt.verify(request.form['password'], data2):
+            session['logged_in'] = True
+            session['username'] = username
+            # flash('Hello %s.' % username)
+            gc.collect()
+            return redirect(url_for(dashboard))
+
+        else:
+            error = "Invalid credentials, try again."
+
+    gc.collect()
+
+    return render_template('login.html', error=error)
 
 
 if __name__ == '__main__':
