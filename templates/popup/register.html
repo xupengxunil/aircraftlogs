@@ -5,33 +5,43 @@
         <h4><span class="glyphicon glyphicon-plus"></span> Register</h4>
     </div>
     <div class="modal-body" style="padding:40px 50px;">
-        <form role="form">
+        <form role="form" id="register" data-toggle="validator">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <input class="form-control" name="firstname" placeholder="First Name" type="text" required autofocus />
+                    <label for="first_name"><span class="glyphicon glyphicon-user"></span> First Name</label>
+                    <input class="form-control" name="first_name" placeholder="First Name" type="text">
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <input class="form-control" name="lastname" placeholder="Last Name" type="text" required />
+                    <label for="last_name"><span class="glyphicon glyphicon-user"></span> Last Name</label>
+                    <input class="form-control" name="last_name" placeholder="Last Name" type="text">
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <input class="form-control" name="email" placeholder="E-mail" type="email" required />
+                    <label for="email"><span class="glyphicon glyphicon-envelope"></span> Email</label>
+                    <input class="form-control" name="email" placeholder="E-mail" type="email">
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <input class="form-control" name="Retype email" placeholder="Retype E-mail" type="email" required />
+                    <label for="retype_email"><span class="glyphicon glyphicon-envelope"></span> Retype E-mail</label>
+                    <input class="form-control" name="retype_email" placeholder="Retype E-mail" type="email" data-match="#email">
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <input class="form-control" name="Password" placeholder="Password" type="Password" required autofocus />
+                    <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+                    <input class="form-control" name="password" placeholder="Password" type="Password" data-minlength="6">
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <input class="form-control" name="Retype Password" placeholder="Retype Password" type="Password" required />
+                    <label for="retype_password"><span class="glyphicon glyphicon-eye-open"></span> Retype Email</label>
+                    <input class="form-control" name="retype_password" placeholder="Retype Password" type="Password" data-match="#password" data-match-error="Passwords Must Match">
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-plus"></span> Register</button>
+        <script>
+            $('#Register').validator()
+        </script>
         </form>
     </div>
     <div class="modal-footer">
@@ -41,3 +51,5 @@
     </div>
 
 </div>
+
+

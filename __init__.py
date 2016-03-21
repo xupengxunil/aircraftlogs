@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, request, url_for, redirect, ses
 from passlib.hash import sha256_crypt
 import gc
 
-from forms import RegistrationForm
+from forms import RegistrationForm, LoginForm
 from content_management import Content
 from dbconnect import connection
 
@@ -16,9 +16,12 @@ def page_not_found(e):
     return render_template("errors/404.html"), 404
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def homepage():
-    return render_template("main.html")
+    error = None
+    form = LoginForm(request.form)
+
+    return render_template("main.html", form=form, error=error)
 
 
 @app.route('/dashboard/')
@@ -64,29 +67,29 @@ def register_page():
 
 @app.route('/login/', methods=["GET", "POST"])
 def login_page():
-    error = ''
+    error = None
 
-    c, conn = connection()
+    form = LoginForm(request.form)
 
     if request.method == "POST":
-        username = request.form['username']
+        c, conn = connection()
+        username = form.username.data
         sql_query = "SELECT * FROM users WHERE username = (%s)"
         data = c.execute(sql_query, (username,))
-        data2 = c.fetchone()[2]
+        data = c.fetchone()[2]
 
-        if sha256_crypt.verify(request.form['password'], data2):
+        if sha256_crypt.verify(form.password.data, data):
             session['logged_in'] = True
             session['username'] = username
-            # flash('Hello %s.' % username)
+            flash('Hello %s.' % username)
             gc.collect()
-            return redirect(url_for(dashboard))
+            return redirect(url_for('dashboard'))
 
         else:
             error = "Invalid credentials, try again."
 
     gc.collect()
-
-    return render_template('login.html', error=error)
+    return render_template('login.html', form=form, error=error)
 
 
 if __name__ == '__main__':

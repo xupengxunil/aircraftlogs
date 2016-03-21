@@ -5,20 +5,22 @@
         <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
     </div>
     <div class="modal-body" style="padding:40px 50px;">
+        {% from "_formhelpers.html" import render_field %}
         <form role="form" id="login" data-toggle="validator">
             <div class="form-group">
-                <label for="username"><span class="glyphicon glyphicon-user"></span> Username</label>
-                <input type="email" class="form-control" placeholder="Enter email" name="username" value="{{ request.form.username }}">
+                {{ render_field(form.username) }}
             </div>
-            <div class="form-group">
-                <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                <input type="password" class="form-control" placeholder="Enter password" name="password" value="{{ request.form.username }}">
+            <div class="form-group" class="form-control">
+                {{ render_field(form.password) }}
             </div>
             <div class="checkbox">
                 <label><input type="checkbox" value="" checked>Remember me</label>
             </div>
             <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
         </form>
+        {% if error %}
+            <p class="error"><strong>Error:</strong>{{ error }}</p>
+        {% endif %}
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
