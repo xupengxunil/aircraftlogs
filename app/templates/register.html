@@ -5,24 +5,56 @@
 
     <div class="container-fluid">
 
-        <h4>Register</h4>
-        <br>
-        {% from "_formhelpers.html" import render_field %}
-        <form method="post" action="/register/">
-            <dl>
-                {{ render_field(form.username) }}
-                {{ render_field(form.email) }}
-                {{ render_field(form.password) }}
-                {{ render_field(form.confirm) }}
-                {{ render_field(form.accept_tos) }}
+         <div class="panel-heading">
+        <h4><span class="glyphicon glyphicon-plus"></span> Register</h4>
+    </div>
 
-            </dl>
-            <p><input type="submit" value="Register"></p>
+<div class="panel-body" style="padding:40px 50px;">
+        <form role="form" class="form" method="post" role="form" action="/register/">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
+                    {{ reg_form.first_name.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.first_name(class_="form-control") }}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
+                    {{ reg_form.last_name.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.last_name(class_="form-control") }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
+                    {{ reg_form.username.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.username(class_="form-control") }}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
+                    {{ reg_form.email.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.email(class_="form-control") }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
+                    {{ reg_form.password.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.password(class_="form-control") }}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
+                    {{ reg_form.confirm.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.confirm(class_="form-control") }}
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-plus"></span> Register</button>
         </form>
+    </div>
+    <div class="panel-footer">
+        <p>Already a member? <a href="/">Sign In</a></p>
+        <p>Forgot <a href="#">Password?</a></p>
+    </div>
+
         {% if error %}
             <p class="error"><strong>Error:</strong>{{ error }}</p>
         {% endif %}
-    </div>
+</div>
     </body>
 
 {% endblock %}

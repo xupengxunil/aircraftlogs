@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, PasswordField
+from wtforms import Form, StringField, PasswordField
 from wtforms.validators import Length, DataRequired, EqualTo
 
 
@@ -11,9 +11,6 @@ class RegistrationForm(Form):
                                           EqualTo('confirm',
                                                   message='Passwords must match')])
     confirm = PasswordField('Retype Password', [DataRequired()])
-
-    accept_tos = BooleanField('I accept the Terms of Service and the Privacy Notice',
-                              [DataRequired()])
 
 
 class LoginForm(Form):

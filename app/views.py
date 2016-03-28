@@ -14,9 +14,13 @@ def page_not_found(e):
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
     error = None
-    form = LoginForm(request.form)
+    login_form = LoginForm(request.form)
+    reg_form = RegistrationForm(request.form)
 
-    return render_template("main.html", form=form, error=error)
+    return render_template("main.html",
+                           login_form=login_form,
+                           reg_form=reg_form,
+                           error=error)
 
 
 @app.route('/dashboard/')
@@ -28,43 +32,43 @@ def dashboard():
 @app.route('/register/', methods=['GET', 'POST'])
 def register_page():
 
-    form = RegistrationForm(request.form)
+    reg_form = RegistrationForm(request.form)
 
-    if request.method == "POST" and form.validate():
-        username = form.username.data
-        email = form.email.data
-        password = sha256_crypt.encrypt((str(form.password.data)))
-        c, conn = connection()
-
-        sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
-        x = c.execute(sql_check_reg, (username,))
-
-        if int(x) > 0:
-            flash("That username is already taken, please choose another")
-            return render_template('register.html', form=form)
-
-        else:
-            sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-            c.execute(sql_insert_reg, (username, password, email))
-            conn.commit()
-            flash("Thanks for registering!")
-            c.close()
-            conn.close()
-            gc.collect()
-
-            session['logged_in'] = True
-            session['username'] = username
+    if request.method == "POST" and reg_form.validate():
+        # username = reg_form.username.data
+        # email = form.email.data
+        # password = sha256_crypt.encrypt((str(form.password.data)))
+        # c, conn = connection()
+        #
+        # sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
+        # x = c.execute(sql_check_reg, (username,))
+        #
+        # if int(x) > 0:
+        #     flash("That username is already taken, please choose another")
+        #     return render_template('register.html', form=form)
+        #
+        # else:
+        #     sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+        #     c.execute(sql_insert_reg, (username, password, email))
+        #     conn.commit()
+        #     flash("Thanks for registering!")
+        #     c.close()
+        #     conn.close()
+        #     gc.collect()
+        #
+        #     session['logged_in'] = True
+        #     session['username'] = username
 
             return redirect(url_for('dashboard'))
 
-    return render_template('register.html', form=form)
+    return render_template('register.html',
+                           reg_form=reg_form)
 
 
 @app.route('/login/', methods=["GET", "POST"])
 def login_page():
     error = None
-
-    form = LoginForm(request.form)
+    login_form = LoginForm(request.form)
 
     # if request.method == "POST":
     #     c, conn = connection()
@@ -84,7 +88,9 @@ def login_page():
     #         error = "Invalid credentials, try again."
     #
     # gc.collect()
-    return render_template('login.html', form=form, error=error)
+    return render_template('login.html',
+                           login_form=login_form,
+                           error=error)
 
 
 if __name__ == '__main__':

@@ -4,17 +4,27 @@
     <body>
 
     <div class="container-fluid">
-
-        <h4>Login</h4>
-        <br>
-        {% from "_formhelpers.html" import render_field %}
-        <form method="post" action="/login/">
-            <dl>
-                {{ render_field(form.username) }}
-                {{ render_field(form.password) }}
-            </dl>
-            <p><input type="submit" value="Login"></p>
+        <div class="panel-heading">
+            <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
+        </div>
+        <form role="form" class="form" method="post" role="form" action="/login/">
+            <div class="form-group">
+                {{ login_form.username.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                {{ login_form.username(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ login_form.password.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                {{ login_form.password(class_="form-control") }}
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" value="" checked>Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
         </form>
+        <div class="panel-footer">
+            <p>Not a member? <a href="/">Sign Up</a></p>
+            <p>Forgot <a href="#">Password?</a></p>
+        </div>
         {% if error %}
             <p class="error"><strong>Error:</strong>{{ error }}</p>
         {% endif %}
