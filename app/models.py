@@ -1,38 +1,27 @@
-from wtforms import Form, BooleanField, StringField, PasswordField
-from wtforms.validators import Length, DataRequired, EqualTo
-
 from app import db
+from passlib.hash import sha256_crypt
 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), index=True, unique=True)
-    first_name = db.Column(db.String(50), index=True)
-    last_name = db.Column(db.String(50), index=True)
-    email = db.Column(db.String(100), index=True, unique=True)
+    username = db.Column(db.String(50), unique=True)
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    email = db.Column(db.String(100), unique=True)
+    pwd_hash = db.Column(db.String(100))
 
-    def __init__(self, username, first_name, email):
-        self.username = username
-        self.first_name = first_name
-        self.email = email
+    def __init__(self, username, first_name, last_name, email, password):
+        self.username = username.lower()
+        self.first_name = first_name.title()
+        self.last_name = last_name.title()
+        self.email = email.lower()
+        self.set_password(password)
+
+    def set_password(self, password):
+        self.pwd_hash = sha256_crypt.encrypt((str(password)))
+
+    def check_password(self, password):
+        return sha256_crypt.verify(password, self.pwd_hash)
 
     def __repr__(self):
         return '<User %r>' % self.first_name
-
-
-class RegistrationForm(Form):
-    username = StringField('Username', [Length(min=4, max=20)])
-    email = StringField('Email Address', [Length(min=6, max=100)])
-    password = PasswordField('Password', [DataRequired(),
-                                          EqualTo('confirm',
-                                                  message='Passwords must match')])
-    confirm = PasswordField('Retype Password')
-
-    accept_tos = BooleanField('I accept the Terms of Service and the Privacy Notice',
-                              [DataRequired()])
-
-
-class LoginForm(Form):
-    username = StringField('Username', [DataRequired()])
-    password = PasswordField('Password', [DataRequired()])
-

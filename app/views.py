@@ -3,7 +3,7 @@ from passlib.hash import sha256_crypt
 import gc
 
 from app import app
-from app.models import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm
 
 
 @app.errorhandler(404)
@@ -30,32 +30,32 @@ def register_page():
 
     form = RegistrationForm(request.form)
 
-    # if request.method == "POST" and form.validate():
-    #     username = form.username.data
-    #     email = form.email.data
-    #     password = sha256_crypt.encrypt((str(form.password.data)))
-    #     c, conn = connection()
-    #
-    #     sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
-    #     x = c.execute(sql_check_reg, (username,))
-    #
-    #     if int(x) > 0:
-    #         flash("That username is already taken, please choose another")
-    #         return render_template('register.html', form=form)
-    #
-    #     else:
-    #         sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-    #         c.execute(sql_insert_reg, (username, password, email))
-    #         conn.commit()
-    #         flash("Thanks for registering!")
-    #         c.close()
-    #         conn.close()
-    #         gc.collect()
-    #
-    #         session['logged_in'] = True
-    #         session['username'] = username
-    #
-    #         return redirect(url_for('dashboard'))
+    if request.method == "POST" and form.validate():
+        username = form.username.data
+        email = form.email.data
+        password = sha256_crypt.encrypt((str(form.password.data)))
+        c, conn = connection()
+
+        sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
+        x = c.execute(sql_check_reg, (username,))
+
+        if int(x) > 0:
+            flash("That username is already taken, please choose another")
+            return render_template('register.html', form=form)
+
+        else:
+            sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+            c.execute(sql_insert_reg, (username, password, email))
+            conn.commit()
+            flash("Thanks for registering!")
+            c.close()
+            conn.close()
+            gc.collect()
+
+            session['logged_in'] = True
+            session['username'] = username
+
+            return redirect(url_for('dashboard'))
 
     return render_template('register.html', form=form)
 
