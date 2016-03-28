@@ -1,9 +1,24 @@
-from flask import render_template, flash, request, url_for, redirect, session
+from flask import (render_template, flash, request,
+                   url_for, redirect, session, g)
+from functools import wraps
 from passlib.hash import sha256_crypt
 import gc
 
-from app import app
+from app.models import User
+
+from app import app, db
 from app.forms import RegistrationForm, LoginForm
+
+
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Must be logged in")
+            return redirect(url_for('homepage'))
+    return wrap
 
 
 @app.errorhandler(404)
@@ -24,45 +39,38 @@ def homepage():
 
 
 @app.route('/dashboard/')
+@login_required
 def dashboard():
-    # flash('Welcome user')
     return render_template("dashboard.html")
 
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register_page():
-
     reg_form = RegistrationForm(request.form)
 
-    if request.method == "POST" and reg_form.validate():
-        # username = reg_form.username.data
-        # email = form.email.data
-        # password = sha256_crypt.encrypt((str(form.password.data)))
-        # c, conn = connection()
-        #
-        # sql_check_reg = "SELECT * FROM users WHERE username = (%s)"
-        # x = c.execute(sql_check_reg, (username,))
-        #
-        # if int(x) > 0:
-        #     flash("That username is already taken, please choose another")
-        #     return render_template('register.html', form=form)
-        #
-        # else:
-        #     sql_insert_reg = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-        #     c.execute(sql_insert_reg, (username, password, email))
-        #     conn.commit()
-        #     flash("Thanks for registering!")
-        #     c.close()
-        #     conn.close()
-        #     gc.collect()
-        #
-        #     session['logged_in'] = True
-        #     session['username'] = username
-
+    if request.method == "POST":
+        if reg_form.validate() is False:
+            return render_template('register.html',
+                                   reg_form=reg_form)
+        else:
+            new_user = User(
+                reg_form.first_name.data,
+                reg_form.last_name.data,
+                reg_form.username.data,
+                reg_form.email.data,
+                reg_form.password.data
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            gc.collect()
+            session['logged_in'] = True
+            session['username'] = new_user.username
+            flash('Thank you for registering!')
             return redirect(url_for('dashboard'))
 
-    return render_template('register.html',
-                           reg_form=reg_form)
+    elif request.method == "GET":
+        return render_template('register.html',
+                               reg_form=reg_form)
 
 
 @app.route('/login/', methods=["GET", "POST"])
@@ -91,6 +99,15 @@ def login_page():
     return render_template('login.html',
                            login_form=login_form,
                            error=error)
+
+
+@app.route('/logout/')
+@login_required
+def logout():
+    session.clear()
+    flash("You have been logged out.")
+    gc.collect()
+    return redirect(url_for('homepage'))
 
 
 if __name__ == '__main__':
