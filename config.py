@@ -5,4 +5,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 
 WTF_CSRF_ENABLED = True
-SECRET_KEY = '$5$rounds=535000$WFVx2xFTtGzGmAz/$QuyHPHTIH4pqAjXh/kEyp8sdfUF/Zt/7KvblYoOqTBA'
+SECRET_KEY = 'deleted for privacy'
