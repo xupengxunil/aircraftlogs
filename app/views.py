@@ -1,7 +1,7 @@
 from flask import (render_template, flash, request,
                    url_for, redirect, session, g)
 from functools import wraps
-from passlib.hash import sha256_crypt
+
 import gc
 
 from app.models import User
