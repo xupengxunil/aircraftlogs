@@ -11,7 +11,7 @@
 <header>
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/dashboard/">
                 <img style="max-width:60px; margin-top: -7px;" src="{{ url_for('static', filename='images/mainlogo.png') }}">
             </a>
         </div>
@@ -59,7 +59,8 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        {% block body %} {% endblock %}
+        {% block body %}
+        {% endblock %}
 
     </div>
 

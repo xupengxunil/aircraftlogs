@@ -13,9 +13,9 @@ class RegistrationForm(Form):
     email = StringField('Email Address',
                         [Length(min=6, max=100)])
     password = PasswordField('Password',
-                             [DataRequired("Please enter a password"),
+                             [DataRequired("Please enter a password."),
                               EqualTo('confirm',
-                                      message='Passwords must match')])
+                                      message='Passwords must match.')])
     confirm = PasswordField('Retype Password',
                             [DataRequired("Please retype your password.")])
 
@@ -36,5 +36,20 @@ class RegistrationForm(Form):
 
 
 class LoginForm(Form):
-    username = StringField('Username', [DataRequired()])
-    password = PasswordField('Password', [DataRequired()])
+    username = StringField('Username', [DataRequired('Please enter your Username.')])
+    password = PasswordField('Password', [DataRequired('Please enter your Password.')])
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+
+        user = User.query.filter_by(
+            username=self.username.data.lower()).first()
+        if user and user.check_password(self.password.data):
+            return True
+        else:
+            self.username.errors.append("Invalid username or password.")
+            return False

@@ -78,27 +78,21 @@ def login_page():
     error = None
     login_form = LoginForm(request.form)
 
-    # if request.method == "POST":
-    #     c, conn = connection()
-    #     username = form.username.data
-    #     sql_query = "SELECT * FROM users WHERE username = (%s)"
-    #     data = c.execute(sql_query, (username,))
-    #     data = c.fetchone()[2]
-    #
-    #     if sha256_crypt.verify(form.password.data, data):
-    #         session['logged_in'] = True
-    #         session['username'] = username
-    #         flash('Hello %s.' % username)
-    #         gc.collect()
-    #         return redirect(url_for('dashboard'))
-    #
-    #     else:
-    #         error = "Invalid credentials, try again."
-    #
-    # gc.collect()
-    return render_template('login.html',
-                           login_form=login_form,
-                           error=error)
+    if request.method == "POST":
+        if login_form.validate() is False:
+            return render_template('login.html',
+                                   login_form=login_form,
+                                   error=error)
+        else:
+            session['logged_in'] = True
+            session['username'] = login_form.username.data
+            flash('Welcome %s!' % login_form.username.data)
+            return redirect(url_for('dashboard'))
+
+    elif request.method == "GET":
+        return render_template('login.html',
+                               login_form=login_form,
+                               error=error)
 
 
 @app.route('/logout/')
