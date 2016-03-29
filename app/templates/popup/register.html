@@ -5,43 +5,40 @@
         <h4><span class="glyphicon glyphicon-plus"></span> Register</h4>
     </div>
     <div class="modal-body" style="padding:40px 50px;">
-        <form role="form" id="register" data-toggle="validator">
+        <form role="form" class="form" method="post" role="form" action="/register/">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <label for="first_name"><span class="glyphicon glyphicon-user"></span> First Name</label>
-                    <input class="form-control" name="first_name" placeholder="First Name" type="text">
+                    {{ reg_form.first_name.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.first_name(class_="form-control") }}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <label for="last_name"><span class="glyphicon glyphicon-user"></span> Last Name</label>
-                    <input class="form-control" name="last_name" placeholder="Last Name" type="text">
+                    {{ reg_form.last_name.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.last_name(class_="form-control") }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <label for="email"><span class="glyphicon glyphicon-envelope"></span> Email</label>
-                    <input class="form-control" name="email" placeholder="E-mail" type="email">
+                    {{ reg_form.username.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.username(class_="form-control") }}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <label for="retype_email"><span class="glyphicon glyphicon-envelope"></span> Retype E-mail</label>
-                    <input class="form-control" name="retype_email" placeholder="Retype E-mail" type="email" data-match="#email">
+                    {{ reg_form.email.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.email(class_="form-control") }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <label for="password"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                    <input class="form-control" name="password" placeholder="Password" type="Password" data-minlength="6">
+                    {{ reg_form.password.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.password(class_="form-control") }}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6" style="padding-bottom: 10px;">
-                    <label for="retype_password"><span class="glyphicon glyphicon-eye-open"></span> Retype Email</label>
-                    <input class="form-control" name="retype_password" placeholder="Retype Password" type="Password" data-match="#password" data-match-error="Passwords Must Match">
+                    {{ reg_form.confirm.label(class_="col-lg-6 col-md-6 col-sm-12") }}
+                    {{ reg_form.confirm(class_="form-control") }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-plus"></span> Register</button>
-        <script>
-            $('#Register').validator()
-        </script>
         </form>
     </div>
     <div class="modal-footer">

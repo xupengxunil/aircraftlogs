@@ -1,4 +1,6 @@
-sqlalchemy
 wtforms
 passlib
 flask
+flask-sqlalchemy
+flask-wtf
+jinja2
